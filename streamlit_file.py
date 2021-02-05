@@ -6,6 +6,7 @@ import pdfplumber
 
 # Use pip install pipreqs.
 # Write pipreqs in the terminal to create a requirements.txt file in the folder.
+# Use pipreqs --force to overwrite existing requirements.txt
 
 data_list = []
 payslip = '/Users/andersmarstrand/PycharmProjects/pythonProject/lonseddel/OCR/Lønseddel 17.08.2020-20.09.2020.PDF'
