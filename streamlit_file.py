@@ -2,14 +2,96 @@ import streamlit as st
 import time
 import numpy as np
 import pandas as pd
+import pdfplumber
+
+# Use pip install pipreqs.
+# Write pipreqs in the terminal to create a requirements.txt file in the folder.
+
+data_list = []
+payslip = '/Users/andersmarstrand/PycharmProjects/pythonProject/lonseddel/OCR/Lønseddel 17.08.2020-20.09.2020.PDF'
+'Lønseddel 17.08.2020-20.09.2020'
+'Lønseddel 20.07.2020-16.08.2020'
+with pdfplumber.open(payslip) as pdf:
+    first_page = pdf.pages[0]
+    text = first_page.extract_text()
+
+for row in text.split('\n'):
+    #print(row.strip())
+
+    if '1100' in row:
+        products_dict = {}
+        text = row.split()[1]
+
+        products_dict["Beskrivelse"] = text
+        products_dict["Enheder"] = row.split()[-3]
+        products_dict["Sats"] = row.split()[-2]
+        products_dict["Beløb"] = row.split()[-1]
+
+        data_list.append(products_dict)
+
+    if '1104' in row:
+        products_dict = {}
+        text_1 = row.split()[1]
+        text_2 = row.split()[2]
+        text = text_1 + " " + text_2
+
+        products_dict["Beskrivelse"] = text
+        products_dict["Enheder"] = row.split()[-3]
+        products_dict["Sats"] = row.split()[-2]
+        products_dict["Beløb"] = row.split()[-1]
+
+        data_list.append(products_dict)
+
+    if '1330' in row:
+        products_dict = {}
+
+        text_1 = row.split()[1]
+        text_2 = row.split()[2]
+        text_3 = row.split()[3]
+        text_4 = row.split()[4]
+        text = text_1 + " " + text_2 + " " + text_3 + " " + text_4
+
+        products_dict["Beskrivelse"] = text
+        products_dict["Enheder"] = row.split()[-3]
+        products_dict["Sats"] = row.split()[-2]
+        products_dict["Beløb"]  = row.split()[-1]
+
+        data_list.append(products_dict)
+
+    if '3992' in row:
+        products_dict = {}
+
+        text_1 = row.split()[1]
+        text_2 = row.split()[2]
+        text_3 = row.split()[3]
+        text_4 = row.split()[4]
+        text_5 = row.split()[5]
+        text = text_1 + " " + text_2 + " " + text_3 + " " + text_4 + " " + text_5
+
+        products_dict["Beskrivelse"] = text
+        products_dict["Enheder"] = row.split()[-3]
+        products_dict["Sats"] = row.split()[-2]
+        products_dict["Beløb"]  = row.split()[-1]
+
+        data_list.append(products_dict)
+
+    if 'Lønseddel for perioden' in row:
+        products_dict = {}
+        text_1 = row.split()
+        #print(text_1)
+
+        start_dato = [''.join(text_1[3:5])]
+        slut_dato = [''.join(text_1[6:8])]
+        year_dato = [''.join(text_1[8:])]
+
+        print(start_dato)
+        print(slut_dato)
+        print(year_dato)
 
 st.title('My first app TEST')
 
 st.write("Here's our first attempt at using data to create a table:")
-st.write(pd.DataFrame({
-    'first column': [1, 2, 3, 4],
-    'second column': [10, 20, 30, 40]
-}))
+st.write(pd.DataFrame(data_list))
 
 progress_bar = st.sidebar.progress(0)
 status_text = st.sidebar.empty()
