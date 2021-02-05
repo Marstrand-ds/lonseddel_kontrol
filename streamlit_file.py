@@ -18,7 +18,7 @@ def extract_data_lonseddel(feed):
         text = page.extract_text()
 
         for row in text.split('\n'):
-            st.write(row)
+            #st.write(row)
             if '1100' in row:
                 products_dict = {}
                 text = row.split()[1]
