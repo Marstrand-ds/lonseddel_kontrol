@@ -10,12 +10,12 @@ import pdfplumber
 
 data_list = []
 
-payslip = 'https://github.com/Marstrand-ds/streamlit_test/blob/main/Lonseddel_2017.08.2020-20.09.2020.PDF'
-'Lønseddel 17.08.2020-20.09.2020'
-'Lønseddel 20.07.2020-16.08.2020'
-with pdfplumber.open(payslip) as pdf:
-    first_page = pdf.pages[0]
-    text = first_page.extract_text()
+#payslip = 'https://github.com/Marstrand-ds/streamlit_test/blob/main/Lonseddel_2017.08.2020-20.09.2020.PDF'
+#'Lønseddel 17.08.2020-20.09.2020'
+#'Lønseddel 20.07.2020-16.08.2020'
+#with pdfplumber.open(payslip) as pdf:
+#    first_page = pdf.pages[0]
+#    text = first_page.extract_text()
 
 uploaded_file = st.file_uploader('Choose your .pdf file', type="pdf")
 if uploaded_file is not None:
