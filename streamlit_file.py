@@ -8,113 +8,132 @@ import pdfplumber
 # Write pipreqs in the terminal to create a requirements.txt file in the folder.
 # Use pipreqs --force to overwrite existing requirements.txt
 
-data_list = []
 
-#payslip = 'https://github.com/Marstrand-ds/streamlit_test/blob/main/Lonseddel_2017.08.2020-20.09.2020.PDF'
-#'Lønseddel 17.08.2020-20.09.2020'
-#'Lønseddel 20.07.2020-16.08.2020'
-#with pdfplumber.open(payslip) as pdf:
-#    first_page = pdf.pages[0]
-#    text = first_page.extract_text()
+st.title('Kontrol af lønseddel')
 
-uploaded_file = st.file_uploader('Choose your .pdf file', type="pdf")
-if uploaded_file is not None:
-    df = extract_data(uploaded_file)
+def extract_data_lonseddel(feed):
+    data_list = []
+    with pdfplumber.load(feed) as pdf:
+        page = pdf.pages[0]
+        text = page.extract_text()
 
-    for row in text.split('\n'):
-        #print(row.strip())
+        for row in text.split('\n'):
+            #st.write(row)
+            if '1100' in row:
+                products_dict = {}
+                text = row.split()[1]
 
-        if '1100' in row:
-            products_dict = {}
-            text = row.split()[1]
+                products_dict["Beskrivelse"] = text
+                products_dict["Enheder"] = row.split()[-3]
+                products_dict["Sats"] = row.split()[-2]
+                products_dict["Beløb"] = row.split()[-1]
 
-            products_dict["Beskrivelse"] = text
-            products_dict["Enheder"] = row.split()[-3]
-            products_dict["Sats"] = row.split()[-2]
-            products_dict["Beløb"] = row.split()[-1]
+                data_list.append(products_dict)
+            if '1104' in row:
+                products_dict = {}
+                text_1 = row.split()[1]
+                text_2 = row.split()[2]
+                text = text_1 + " " + text_2
 
-            data_list.append(products_dict)
+                products_dict["Beskrivelse"] = text
+                products_dict["Enheder"] = row.split()[-3]
+                products_dict["Sats"] = row.split()[-2]
+                products_dict["Beløb"] = row.split()[-1]
 
-        if '1104' in row:
-            products_dict = {}
-            text_1 = row.split()[1]
-            text_2 = row.split()[2]
-            text = text_1 + " " + text_2
+                data_list.append(products_dict)
 
-            products_dict["Beskrivelse"] = text
-            products_dict["Enheder"] = row.split()[-3]
-            products_dict["Sats"] = row.split()[-2]
-            products_dict["Beløb"] = row.split()[-1]
+            if '1330' in row:
+                products_dict = {}
 
-            data_list.append(products_dict)
+                text_1 = row.split()[1]
+                text_2 = row.split()[2]
+                text_3 = row.split()[3]
+                text_4 = row.split()[4]
+                text = text_1 + " " + text_2 + " " + text_3 + " " + text_4
 
-        if '1330' in row:
-            products_dict = {}
+                products_dict["Beskrivelse"] = text
+                products_dict["Enheder"] = row.split()[-3]
+                products_dict["Sats"] = row.split()[-2]
+                products_dict["Beløb"] = row.split()[-1]
 
-            text_1 = row.split()[1]
-            text_2 = row.split()[2]
-            text_3 = row.split()[3]
-            text_4 = row.split()[4]
-            text = text_1 + " " + text_2 + " " + text_3 + " " + text_4
+                data_list.append(products_dict)
 
-            products_dict["Beskrivelse"] = text
-            products_dict["Enheder"] = row.split()[-3]
-            products_dict["Sats"] = row.split()[-2]
-            products_dict["Beløb"]  = row.split()[-1]
+            if '3992' in row:
+                products_dict = {}
 
-            data_list.append(products_dict)
+                text_1 = row.split()[1]
+                text_2 = row.split()[2]
+                text_3 = row.split()[3]
+                text_4 = row.split()[4]
+                text_5 = row.split()[5]
+                text = text_1 + " " + text_2 + " " + text_3 + " " + text_4 + " " + text_5
 
-        if '3992' in row:
-            products_dict = {}
+                products_dict["Beskrivelse"] = text
+                products_dict["Enheder"] = row.split()[-3]
+                products_dict["Sats"] = row.split()[-2]
+                products_dict["Beløb"] = row.split()[-1]
 
-            text_1 = row.split()[1]
-            text_2 = row.split()[2]
-            text_3 = row.split()[3]
-            text_4 = row.split()[4]
-            text_5 = row.split()[5]
-            text = text_1 + " " + text_2 + " " + text_3 + " " + text_4 + " " + text_5
+                data_list.append(products_dict)
 
-            products_dict["Beskrivelse"] = text
-            products_dict["Enheder"] = row.split()[-3]
-            products_dict["Sats"] = row.split()[-2]
-            products_dict["Beløb"]  = row.split()[-1]
+            if '8100' in row:
+                total_lonseddel = row.split()[-2]
 
-            data_list.append(products_dict)
+            if 'Overført til reg./konto' in row:
+                products_dict = {}
 
-        if 'Lønseddel for perioden' in row:
-            products_dict = {}
-            text_1 = row.split()
-            #print(text_1)
+                text_1 = row.split()[0]
+                text_2 = row.split()[1]
+                text_3 = row.split()[2]
+                text = text_1 + " " + text_2 + " " + text_3
 
-            start_dato = [''.join(text_1[3:5])]
-            slut_dato = [''.join(text_1[6:8])]
-            year_dato = [''.join(text_1[8:])]
+                products_dict["Beskrivelse"] = text
+                products_dict["Enheder"] = total_lonseddel
+                products_dict["Sats"] = " "
+                products_dict["Beløb"] = row.split()[-1]
 
-            print(start_dato)
-            print(slut_dato)
-            print(year_dato)
+                data_list.append(products_dict)
 
-st.title('My first app TEST')
+            if 'Lønseddel for perioden' in row:
+                text_1 = row.split()
+                #print(text_1)
 
-st.write("Here's our first attempt at using data to create a table:")
-st.write(pd.DataFrame(data_list))
+                start_dato = str([''.join(text_1[3:5])])[2:-2]
+                slut_dato = str([''.join(text_1[6:8])])[2:-2]
+                year_dato = str([''.join(text_1[8:])])[2:-2]
 
-progress_bar = st.sidebar.progress(0)
-status_text = st.sidebar.empty()
-last_rows = np.random.randn(1, 1)
-chart = st.line_chart(last_rows)
+                st.write(f"Lønperioden: {start_dato} til {slut_dato} ({year_dato})")
 
-for i in range(1, 101):
-    new_rows = last_rows[-1, :] + np.random.randn(5, 1).cumsum(axis=0)
-    status_text.text("%i%% Complete" % i)
-    chart.add_rows(new_rows)
-    progress_bar.progress(i)
-    last_rows = new_rows
-    time.sleep(0.05)
+    return data_list  # build more code to return a dataframe
 
-progress_bar.empty()
 
-# Streamlit widgets automatically run the script from top to bottom. Since
-# this button is not connected to any other logic, it just causes a plain
-# rerun.
-st.button("Re-run")
+def extract_data_geofency(feed):
+    data = pd.read_csv(feed,sep=";")
+    data_list = data.loc[:, ['EntryDate', 'Hours']]
+
+    return data_list
+
+# File picker for lønseddel
+uploaded_file_pdf = st.sidebar.file_uploader('Vælg din lønseddel.pdf fil', type="pdf")
+if uploaded_file_pdf is not None:
+    df_lonseddel = extract_data_lonseddel(uploaded_file_pdf)
+    df_lonseddel = pd.DataFrame(df_lonseddel)
+
+    st.write("Data fra lønseddel:")
+    st.table(df_lonseddel.assign(hack='').set_index('hack'))
+
+# File picker for geofency data
+uploaded_file_csv = st.sidebar.file_uploader('Vælg din geofency.csv fil', type="csv", )
+if uploaded_file_csv is not None:
+    df_geofency = extract_data_geofency(uploaded_file_csv)
+    geofency = pd.DataFrame(df_geofency)
+
+    st.write("Data fra Geofency:")
+    st.table(geofency.assign(hack='').set_index('hack'))
+
+    option = st.sidebar.selectbox(
+        'Which number do you like best?',
+        pd.DataFrame(df_geofency)['EntryDate'])
+
+    'You selected:', option
+
+st.sidebar.button("Re-run")
