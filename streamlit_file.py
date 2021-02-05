@@ -9,7 +9,8 @@ import pdfplumber
 # Use pipreqs --force to overwrite existing requirements.txt
 
 data_list = []
-payslip = '/Users/andersmarstrand/PycharmProjects/FinTech/Lønseddel 17.08.2020-20.09.2020.PDF'
+
+payslip = 'https://github.com/Marstrand-ds/streamlit_test/blob/main/Lonseddel_2017.08.2020-20.09.2020.PDF'
 'Lønseddel 17.08.2020-20.09.2020'
 'Lønseddel 20.07.2020-16.08.2020'
 with pdfplumber.open(payslip) as pdf:
