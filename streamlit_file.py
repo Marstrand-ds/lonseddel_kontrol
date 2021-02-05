@@ -17,6 +17,10 @@ with pdfplumber.open(payslip) as pdf:
     first_page = pdf.pages[0]
     text = first_page.extract_text()
 
+uploaded_file = st.file_uploader('Choose your .pdf file', type="pdf")
+if uploaded_file is not None:
+    df = extract_data(uploaded_file)
+
 for row in text.split('\n'):
     #print(row.strip())
 
