@@ -21,78 +21,78 @@ uploaded_file = st.file_uploader('Choose your .pdf file', type="pdf")
 if uploaded_file is not None:
     df = extract_data(uploaded_file)
 
-for row in text.split('\n'):
-    #print(row.strip())
+    for row in text.split('\n'):
+        #print(row.strip())
 
-    if '1100' in row:
-        products_dict = {}
-        text = row.split()[1]
+        if '1100' in row:
+            products_dict = {}
+            text = row.split()[1]
 
-        products_dict["Beskrivelse"] = text
-        products_dict["Enheder"] = row.split()[-3]
-        products_dict["Sats"] = row.split()[-2]
-        products_dict["Beløb"] = row.split()[-1]
+            products_dict["Beskrivelse"] = text
+            products_dict["Enheder"] = row.split()[-3]
+            products_dict["Sats"] = row.split()[-2]
+            products_dict["Beløb"] = row.split()[-1]
 
-        data_list.append(products_dict)
+            data_list.append(products_dict)
 
-    if '1104' in row:
-        products_dict = {}
-        text_1 = row.split()[1]
-        text_2 = row.split()[2]
-        text = text_1 + " " + text_2
+        if '1104' in row:
+            products_dict = {}
+            text_1 = row.split()[1]
+            text_2 = row.split()[2]
+            text = text_1 + " " + text_2
 
-        products_dict["Beskrivelse"] = text
-        products_dict["Enheder"] = row.split()[-3]
-        products_dict["Sats"] = row.split()[-2]
-        products_dict["Beløb"] = row.split()[-1]
+            products_dict["Beskrivelse"] = text
+            products_dict["Enheder"] = row.split()[-3]
+            products_dict["Sats"] = row.split()[-2]
+            products_dict["Beløb"] = row.split()[-1]
 
-        data_list.append(products_dict)
+            data_list.append(products_dict)
 
-    if '1330' in row:
-        products_dict = {}
+        if '1330' in row:
+            products_dict = {}
 
-        text_1 = row.split()[1]
-        text_2 = row.split()[2]
-        text_3 = row.split()[3]
-        text_4 = row.split()[4]
-        text = text_1 + " " + text_2 + " " + text_3 + " " + text_4
+            text_1 = row.split()[1]
+            text_2 = row.split()[2]
+            text_3 = row.split()[3]
+            text_4 = row.split()[4]
+            text = text_1 + " " + text_2 + " " + text_3 + " " + text_4
 
-        products_dict["Beskrivelse"] = text
-        products_dict["Enheder"] = row.split()[-3]
-        products_dict["Sats"] = row.split()[-2]
-        products_dict["Beløb"]  = row.split()[-1]
+            products_dict["Beskrivelse"] = text
+            products_dict["Enheder"] = row.split()[-3]
+            products_dict["Sats"] = row.split()[-2]
+            products_dict["Beløb"]  = row.split()[-1]
 
-        data_list.append(products_dict)
+            data_list.append(products_dict)
 
-    if '3992' in row:
-        products_dict = {}
+        if '3992' in row:
+            products_dict = {}
 
-        text_1 = row.split()[1]
-        text_2 = row.split()[2]
-        text_3 = row.split()[3]
-        text_4 = row.split()[4]
-        text_5 = row.split()[5]
-        text = text_1 + " " + text_2 + " " + text_3 + " " + text_4 + " " + text_5
+            text_1 = row.split()[1]
+            text_2 = row.split()[2]
+            text_3 = row.split()[3]
+            text_4 = row.split()[4]
+            text_5 = row.split()[5]
+            text = text_1 + " " + text_2 + " " + text_3 + " " + text_4 + " " + text_5
 
-        products_dict["Beskrivelse"] = text
-        products_dict["Enheder"] = row.split()[-3]
-        products_dict["Sats"] = row.split()[-2]
-        products_dict["Beløb"]  = row.split()[-1]
+            products_dict["Beskrivelse"] = text
+            products_dict["Enheder"] = row.split()[-3]
+            products_dict["Sats"] = row.split()[-2]
+            products_dict["Beløb"]  = row.split()[-1]
 
-        data_list.append(products_dict)
+            data_list.append(products_dict)
 
-    if 'Lønseddel for perioden' in row:
-        products_dict = {}
-        text_1 = row.split()
-        #print(text_1)
+        if 'Lønseddel for perioden' in row:
+            products_dict = {}
+            text_1 = row.split()
+            #print(text_1)
 
-        start_dato = [''.join(text_1[3:5])]
-        slut_dato = [''.join(text_1[6:8])]
-        year_dato = [''.join(text_1[8:])]
+            start_dato = [''.join(text_1[3:5])]
+            slut_dato = [''.join(text_1[6:8])]
+            year_dato = [''.join(text_1[8:])]
 
-        print(start_dato)
-        print(slut_dato)
-        print(year_dato)
+            print(start_dato)
+            print(slut_dato)
+            print(year_dato)
 
 st.title('My first app TEST')
 
