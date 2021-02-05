@@ -1,5 +1,4 @@
 import streamlit as st
-import time
 import numpy as np
 import pandas as pd
 import pdfplumber
@@ -8,6 +7,7 @@ import pdfplumber
 # Write pipreqs in the terminal to create a requirements.txt file in the folder.
 # Use pipreqs --force to overwrite existing requirements.txt
 
+# Markdown emoji's: https://raw.githubusercontent.com/omnidan/node-emoji/master/lib/emoji.json
 
 st.title('Kontrol af lønseddel')
 
@@ -18,13 +18,14 @@ def extract_data_lonseddel(feed):
         text = page.extract_text()
 
         for row in text.split('\n'):
-            #st.write(row)
+            st.write(row)
             if '1100' in row:
                 products_dict = {}
                 text = row.split()[1]
 
                 products_dict["Beskrivelse"] = text
                 products_dict["Enheder"] = row.split()[-3]
+                timer = row.split()[-3]
                 products_dict["Sats"] = row.split()[-2]
                 products_dict["Beløb"] = row.split()[-1]
 
@@ -75,8 +76,10 @@ def extract_data_lonseddel(feed):
 
                 data_list.append(products_dict)
 
-            if '8100' in row:
+            #if '8100' in row:
                 total_lonseddel = row.split()[-2]
+            #else:
+                total_lonseddel = timer
 
             if 'Overført til reg./konto' in row:
                 products_dict = {}
@@ -87,7 +90,7 @@ def extract_data_lonseddel(feed):
                 text = text_1 + " " + text_2 + " " + text_3
 
                 products_dict["Beskrivelse"] = text
-                products_dict["Enheder"] = total_lonseddel
+                products_dict["Enheder"] = timer
                 products_dict["Sats"] = " "
                 products_dict["Beløb"] = row.split()[-1]
 
@@ -97,8 +100,8 @@ def extract_data_lonseddel(feed):
                 text_1 = row.split()
                 #print(text_1)
 
-                start_dato = str([''.join(text_1[3:5])])[2:-2]
-                slut_dato = str([''.join(text_1[6:8])])[2:-2]
+                start_dato = str([' '.join(text_1[3:5])])[2:-2]
+                slut_dato = str([' '.join(text_1[6:8])])[2:-2]
                 year_dato = str([''.join(text_1[8:])])[2:-2]
 
                 st.write(f"Lønperioden: {start_dato} til {slut_dato} ({year_dato})")
@@ -113,16 +116,19 @@ def extract_data_geofency(feed):
     return data_list
 
 # File picker for lønseddel
-uploaded_file_pdf = st.sidebar.file_uploader('Vælg din lønseddel.pdf fil', type="pdf")
+uploaded_file_pdf = st.sidebar.file_uploader('Vælg din lønseddel.pdf', type="pdf")
 if uploaded_file_pdf is not None:
     df_lonseddel = extract_data_lonseddel(uploaded_file_pdf)
     df_lonseddel = pd.DataFrame(df_lonseddel)
 
     st.write("Data fra lønseddel:")
     st.table(df_lonseddel.assign(hack='').set_index('hack'))
+else:
+    #https://docs.streamlit.io/en/stable/api.html
+    st.markdown(':arrow_left: ' + '**Vælg din lønseddel.**')
 
 # File picker for geofency data
-uploaded_file_csv = st.sidebar.file_uploader('Vælg din geofency.csv fil', type="csv", )
+uploaded_file_csv = st.sidebar.file_uploader('Vælg din geofency.csv', type="csv", )
 if uploaded_file_csv is not None:
     df_geofency = extract_data_geofency(uploaded_file_csv)
     geofency = pd.DataFrame(df_geofency)
@@ -130,10 +136,13 @@ if uploaded_file_csv is not None:
     st.write("Data fra Geofency:")
     st.table(geofency.assign(hack='').set_index('hack'))
 
-    option = st.sidebar.selectbox(
-        'Which number do you like best?',
-        pd.DataFrame(df_geofency)['EntryDate'])
-
-    'You selected:', option
+    #option = st.sidebar.selectbox(
+    #    'Which number do you like best?',
+    #    pd.DataFrame(df_geofency)['EntryDate'])
+    #
+    #'You selected:', option
+else:
+    #https://docs.streamlit.io/en/stable/api.html
+    st.markdown(':arrow_left: ' + '**Indsæt din Geofency data.**')
 
 st.sidebar.button("Re-run")
