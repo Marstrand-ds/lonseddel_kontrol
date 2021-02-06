@@ -11,6 +11,8 @@ import pdfplumber
 
 st.title('Kontrol af lønseddel')
 
+my_slot1 = st.empty()
+
 def extract_data_lonseddel(feed):
     data_list = []
     with pdfplumber.load(feed) as pdf:
@@ -20,6 +22,7 @@ def extract_data_lonseddel(feed):
         for row in text.split('\n'):
             #st.write(row)
             if '1100' in row:
+                global timer
                 products_dict = {}
                 text = row.split()[1]
 
@@ -76,12 +79,12 @@ def extract_data_lonseddel(feed):
 
                 data_list.append(products_dict)
 
-            #if '8100' in row:
-                total_lonseddel = row.split()[-2]
-            #else:
-                total_lonseddel = timer
 
             if 'Overført til reg./konto' in row:
+                global udbetaling
+                if '8100' in row:
+                    timer = row.split()[-2]
+
                 products_dict = {}
 
                 text_1 = row.split()[0]
@@ -92,7 +95,8 @@ def extract_data_lonseddel(feed):
                 products_dict["Beskrivelse"] = text
                 products_dict["Enheder"] = timer
                 products_dict["Sats"] = " "
-                products_dict["Beløb"] = row.split()[-1]
+                udbetaling = row.split()[-1]
+                products_dict["Beløb"] = udbetaling
 
                 data_list.append(products_dict)
 
@@ -100,18 +104,26 @@ def extract_data_lonseddel(feed):
                 text_1 = row.split()
                 #print(text_1)
 
+                global start_dato, slut_dato,year_dato
                 start_dato = str([' '.join(text_1[3:5])])[2:-2]
-                slut_dato = str([' '.join(text_1[6:8])])[2:-2]
-                year_dato = str([''.join(text_1[8:])])[2:-2]
-
-                st.write(f"Lønperioden: {start_dato} til {slut_dato} ({year_dato})")
+                slut_dato = str([' '.join(text_1[-3:-1])])[2:-2]
+                year_dato = str([''.join(text_1[-1:])])[2:-2]
 
     return data_list  # build more code to return a dataframe
 
 
 def extract_data_geofency(feed):
+
     data = pd.read_csv(feed,sep=";")
-    data_list = data.loc[:, ['EntryDate', 'Hours']]
+
+    data_list = data.loc[:, ['Location', 'EntryDate', 'EntryTime', 'ExitTime', 'Hours']]
+
+    global total_hours
+    total_hours = 0.00
+    for row in data.itertuples():
+        total_hours = float(total_hours)+ float(row[7].replace(',','.'))
+
+    #data_list.loc['Total',:] = round(total_hours,2)
 
     return data_list
 
@@ -121,7 +133,7 @@ if uploaded_file_pdf is not None:
     df_lonseddel = extract_data_lonseddel(uploaded_file_pdf)
     df_lonseddel = pd.DataFrame(df_lonseddel)
 
-    st.write("Data fra lønseddel:")
+    st.header("Data fra lønseddel")
     st.table(df_lonseddel.assign(hack='').set_index('hack'))
 else:
     #https://docs.streamlit.io/en/stable/api.html
@@ -133,7 +145,7 @@ if uploaded_file_csv is not None:
     df_geofency = extract_data_geofency(uploaded_file_csv)
     geofency = pd.DataFrame(df_geofency)
 
-    st.write("Data fra Geofency:")
+    st.header("Data fra Geofency")
     st.table(geofency.assign(hack='').set_index('hack'))
 
     #option = st.sidebar.selectbox(
@@ -145,4 +157,13 @@ else:
     #https://docs.streamlit.io/en/stable/api.html
     st.markdown(':arrow_left: ' + '**Indsæt din Geofency data.**')
 
+if uploaded_file_csv and uploaded_file_pdf is not None:
+    timer = timer.replace(",",".")
+    timer = float(timer)
+    my_slot1.write(f":calendar: Lønperioden: {start_dato} til {slut_dato} ({year_dato})  "
+                   f"\n:clock3: Der udbetales løn for **{timer}** og **{round(total_hours,2)}** er registreret i Geofency.  "
+                   f"\n:moneybag: Udbetaling på {udbetaling} kr.")
+
 st.sidebar.button("Re-run")
+
+
