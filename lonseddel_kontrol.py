@@ -6,7 +6,9 @@ import pdfplumber
 # Write pipreqs in the terminal to create a requirements.txt file in the folder.
 # Use pipreqs --force to overwrite existing requirements.txt
 
-# Run streamlit local by writing 'streamlit run stremlit_file.py' in the PyCharm terminal.
+#pip install requirements.txt
+
+# Run streamlit local by writing 'streamlit run lonseddel_kontrol.py' in the PyCharm terminal.
 
 # Markdown emoji's: https://raw.githubusercontent.com/omnidan/node-emoji/master/lib/emoji.json
 
