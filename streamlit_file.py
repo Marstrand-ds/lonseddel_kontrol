@@ -165,6 +165,5 @@ if uploaded_file_csv and uploaded_file_pdf is not None:
                    f"\n:moneybag: Udbetaling på {udbetaling} kr.")
 
 st.sidebar.button("Re-run")
-#TEst
 
 
