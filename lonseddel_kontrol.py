@@ -12,7 +12,7 @@ import pdfplumber
 
 # Markdown emoji's: https://raw.githubusercontent.com/omnidan/node-emoji/master/lib/emoji.json
 
-st.title('Kontrol af lønseddel Test')
+st.title('Kontrol af lønseddel')
 
 my_slot1 = st.empty()
 
