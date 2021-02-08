@@ -147,7 +147,7 @@ uploaded_file_csv = st.sidebar.file_uploader('Vælg din geofency.csv', type="csv
 if uploaded_file_csv is not None:
     df_geofency = extract_data_geofency(uploaded_file_csv)
     geofency = pd.DataFrame(df_geofency)
-    geofency.rename(columns={'EntryDate':'Dato'})
+    geofency.rename(columns={'EntryDate':'Dato'},inplace=True)
 
     st.header("Data fra Geofency")
     st.table(geofency.assign(hack='').set_index('hack'))
