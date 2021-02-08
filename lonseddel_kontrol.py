@@ -149,7 +149,7 @@ if uploaded_file_csv is not None:
     geofency = pd.DataFrame(df_geofency)
 
     # Renaming the columns from geofency
-    geofency.rename(columns={'Location': 'Job'}, inplace=True)
+    geofency.rename(columns={'Location': 'Arbejdsplads'}, inplace=True)
     geofency.rename(columns={'EntryDate':'Dato'},inplace=True)
     geofency.rename(columns={'EntryTime': 'Start'}, inplace=True)
     geofency.rename(columns={'ExitTime': 'Slut'}, inplace=True)
