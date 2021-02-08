@@ -147,7 +147,13 @@ uploaded_file_csv = st.sidebar.file_uploader('Vælg din geofency.csv', type="csv
 if uploaded_file_csv is not None:
     df_geofency = extract_data_geofency(uploaded_file_csv)
     geofency = pd.DataFrame(df_geofency)
+
+    # Renaming the columns from geofency
+    geofency.rename(columns={'Location': 'Job'}, inplace=True)
     geofency.rename(columns={'EntryDate':'Dato'},inplace=True)
+    geofency.rename(columns={'EntryTime': 'Start'}, inplace=True)
+    geofency.rename(columns={'ExitTime': 'Slut'}, inplace=True)
+    geofency.rename(columns={'Hours': 'Timer'}, inplace=True)
 
     st.header("Data fra Geofency")
     st.table(geofency.assign(hack='').set_index('hack'))
