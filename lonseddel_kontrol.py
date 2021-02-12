@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import pdfplumber
 
+
 # Use pip install pipreqs.
 # Write pipreqs in the terminal to create a requirements.txt file in the folder.
 # Use pipreqs --force to overwrite existing requirements.txt

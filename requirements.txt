@@ -2,3 +2,4 @@ numpy==1.20.0
 pandas==1.2.1
 pdfplumber==0.5.25
 streamlit==0.75.0
+boto3~=1.17.7
