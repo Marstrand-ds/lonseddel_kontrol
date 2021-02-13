@@ -100,30 +100,3 @@ if file_name is not None:
             for item in resultPage["Blocks"]:
                 if item["BlockType"] == "LINE":
                     st.write('\033[94m' + item["Text"] + '\033[0m')
-
-
-
-
-
-
-#-----
-
-# Document
-#bucket = 'textract-console-us-east-2-93670593-4169-4d03-883c-b1e56ed9e822'
-#path = '/Users/andersmarstrand/Documents/GitHub/lonseddel_kontrol/'
-#filename = 'lonseddel_17.08.2020-20.09.2020.pdf'
-
-#s3 = boto3.resource('s3',
-                    #aws_access_key_id='AKIAJRKQXZT4V4WSUQBQ',
-                    #aws_secret_access_key='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')
-
-#print(f'uploading {filename} to s3')
-#s3.Bucket(bucket).upload_file(path+filename, filename)
-
-#client = boto3.client('textract', 'us-east-2')
-#response = client.start_document_text_detection(
-                   #DocumentLocation={'S3Object': {'Bucket': bucket, 'Name': filename} })
-#print(response)
-#JobID = response.get('JobId')
-#response = client.get_document_text_detection(JobID=JobID)
-#print(response)
