@@ -144,7 +144,8 @@ else:
     st.markdown(':arrow_left: ' + '**Vælg din lønseddel.**')
 
 # File picker for geofency data
-uploaded_file_csv = st.sidebar.file_uploader('Vælg din geofency.csv', type="csv", )
+uploaded_file_csv = st.sidebar.file_uploader('Vælg din geofency.csv', type="csv")
+
 if uploaded_file_csv is not None:
     df_geofency = extract_data_geofency(uploaded_file_csv)
     geofency = pd.DataFrame(df_geofency)
