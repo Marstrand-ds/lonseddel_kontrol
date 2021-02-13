@@ -127,6 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-/AWSCLIV2.pkg
+/api_key_secret
 /ACCESS_ID
 /ACCESS_KEY
